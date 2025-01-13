@@ -3,18 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webhook Viewer</title>
+    <title>Production Server</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #00f2fe;
+        }
+    </style>
 </head>
 <body>
-    <h1>Webhook Data Viewer</h1>
-    {% if webhook_data %}
-        <ul>
-            {% for data in webhook_data %}
-                <li><pre>{{ data | tojson(indent=2) }}</pre></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No webhook data received yet.</p>
-    {% endif %}
+    <div class="container">
+        <h1>Welcome Admin!</h1>
+        <p>
+            This is the <span class="highlight">Production Server</span>. <br><br>
+            Now that we are live and we have a handler URL, we will start testing our
+            <span class="highlight">Bitrix24 outbound webhook</span> that will listen to any event happening on
+            Bitrix24 and send information regarding that to our middleware application.
+        </p>
+    </div>
 </body>
 </html>
