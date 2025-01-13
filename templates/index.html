@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook Viewer</title>
+</head>
+<body>
+    <h1>Webhook Data Viewer</h1>
+    {% if webhook_data %}
+        <ul>
+            {% for data in webhook_data %}
+                <li><pre>{{ data | tojson(indent=2) }}</pre></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No webhook data received yet.</p>
+    {% endif %}
+</body>
+</html>
