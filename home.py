@@ -20,3 +20,9 @@ def webhook_handler():
         return jsonify({"status": "success", "message": "Webhook received!"}), 200
     else:
         return jsonify({"status": "error", "message": "Invalid data format!"}), 400
+
+
+@home.route('/about_us')  # About Us route
+def about_us():
+    return render_template('about_us.html')
+
