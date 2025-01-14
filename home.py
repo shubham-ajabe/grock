@@ -17,7 +17,7 @@ webhook_data_store = []
 def webhook():
     if request.method == 'GET':
         # Render the UI with stored webhook data
-        return render_template('index.html', data=webhook_data_store)
+        return render_template('business_sector.html', data=webhook_data_store)
 
     if request.method == 'POST':
         # Parse incoming JSON payload
