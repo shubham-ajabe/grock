@@ -10,16 +10,11 @@ webhook_data_store = []
 def index():
     return render_template('index.html', webhook_data=webhook_data_store)
 
-@home.route('/webhook', methods=['POST'])  # Webhook route
-def webhook_handler():
-    # Parse the incoming webhook data
-    if request.is_json:
-        webhook_data = request.json
-        webhook_data_store.append(webhook_data)  # Store for display
-        print(f"Webhook received: {webhook_data}")
-        return jsonify({"status": "success", "message": "Webhook received!"}), 200
-    else:
-        return jsonify({"status": "error", "message": "Invalid data format!"}), 400
+@home.route('/webhook', methods=['GET', 'POST'])
+def webhook():
+    if request.method == 'GET':
+        # Handle browser-based GET requests
+        return jsonify({"status": "Webhook is live!"}), 200
 
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
