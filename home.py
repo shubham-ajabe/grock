@@ -1,4 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify
+import logging
+
+logging.basicConfig(filename='webhook.log', level=logging.INFO, format='%(asctime)s - %(message)s')
 
 # Create a Blueprint for routes
 home = Blueprint('home', __name__)
@@ -15,6 +18,28 @@ def webhook():
     if request.method == 'GET':
         # Handle browser-based GET requests
         return jsonify({"status": "Webhook is live!"}), 200
+
+    if request.method == 'POST':
+        # Parse the incoming JSON payload
+        data = request.json
+        if not data:
+            logging.error("Invalid payload: No data received")
+            return jsonify({"error": "Invalid payload: No data received"}), 400
+
+        # Extract the auth token from the payload
+        auth = data.get('auth', {})
+        access_token = auth.get('access_token', '')
+
+        # Replace 'YOUR_VALID_ACCESS_TOKEN' with your actual Bitrix24 token
+        VALID_TOKEN = "vyci2oo2qbtykj55ndjnlwuq8kks6clr"
+
+        if access_token != VALID_TOKEN:
+            logging.error("Unauthorized: Invalid access token")
+            return jsonify({"error": "Unauthorized: Invalid access token"}), 401
+
+        # Log the successful reception of data
+        logging.info(f"Webhook received: {data}")
+        return jsonify({"status": "success", "message": "Webhook received!"}), 200
 
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
