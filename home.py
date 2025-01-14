@@ -8,7 +8,6 @@ home = Blueprint('home', __name__)
 
 # Store webhook data for display (optional for testing)
 webhook_data_store = []
-
 @home.route('/')  # Home route
 def index():
     return render_template('index.html', webhook_data=webhook_data_store)
@@ -32,7 +31,7 @@ def webhook():
         access_token = auth.get('access_token', '')
 
         # Replace with your actual Bitrix24 token
-        VALID_TOKEN = "YOUR_VALID_ACCESS_TOKEN"
+        VALID_TOKEN = "vyci2oo2qbtykj55ndjnlwuq8kks6clr"
 
         if access_token != VALID_TOKEN:
             logging.error("Unauthorized: Invalid access token")
