@@ -6,7 +6,7 @@
     <title>Production Server</title>
     <style>
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background: #f4f7fc;
@@ -30,26 +30,39 @@
             margin-bottom: 20px;
             color: #2c3e50;
         }
-        p {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: #4d4d4d;
+        .button-container {
+            margin-top: 20px;
         }
-        .highlight {
+        .button {
+            display: block;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 10px auto;
+            border-radius: 5px;
+            width: 200px;
+            text-align: center;
+            font-size: 1em;
             font-weight: bold;
-            color: #3498db;
+        }
+        .button:hover {
+            background: #2980b9;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Welcome, Admin!</h1>
-        <p>
-            This is the <span class="highlight">Production Server</span>. <br><br>
-            Now that we are live and we have a handler URL, we will start testing our
-            <span class="highlight">Bitrix24 outbound webhook</span> that will listen to any event happening on
-            Bitrix24 and send information regarding that to our middleware application.
-        </p>
+        <p>Select a page to navigate:</p>
+        <div class="button-container">
+            <a href="/about_us" class="button">About Us</a>
+            <a href="/our_services" class="button">Our Services</a>
+            <a href="/business_sector" class="button">Business Sector</a>
+            <a href="/blog" class="button">Blog</a>
+            <a href="/quick_links" class="button">Quick Links</a>
+            <a href="/our_vision" class="button">Our Vision</a>
+        </div>
     </div>
 </body>
 </html>
