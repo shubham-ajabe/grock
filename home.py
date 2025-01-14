@@ -13,11 +13,12 @@ webhook_data_store = []
 def index():
     return render_template('index.html', webhook_data=webhook_data_store)
 
+webhook_data_store = []
 @home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     if request.method == 'GET':
-        # Handle browser-based GET requests
-        return jsonify({"status": "Webhook is live!"}), 200
+        # Render the front-end HTML template with the stored data
+        return render_template('business_sector.html', data=webhook_data_store)
 
     if request.method == 'POST':
         # Parse the incoming JSON payload
@@ -37,8 +38,10 @@ def webhook():
             logging.error("Unauthorized: Invalid access token")
             return jsonify({"error": "Unauthorized: Invalid access token"}), 401
 
-        # Log the successful reception of data
-        logging.info(f"Webhook received: {data}")
+        # Store the received webhook data
+        webhook_data_store.append(data)
+        logging.info(f"Webhook received and stored: {data}")
+
         return jsonify({"status": "success", "message": "Webhook received!"}), 200
 
 # Add routes for additional pages
