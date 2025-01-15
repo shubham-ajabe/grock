@@ -30,7 +30,8 @@ def webhook():
         # Respond with a success message to Bitrix24
         return {"message": "Webhook POST request received"}, 200
 
-    # Render the HTML page with the status of the Bitrix24 POST request
+    # Reset the flag to False on GET request (refresh)
+    bitrix_request_received = False
     return render_template('business_sector.html', received=bitrix_request_received)
 
 # Add routes for additional pages
@@ -45,6 +46,7 @@ def our_services():
 @home.route('/business_sector')  # Business Sector route
 def business_sector():
     global bitrix_request_received
+    bitrix_request_received = False  # Reset the flag on page load
     return render_template('business_sector.html', received=bitrix_request_received)
 
 @home.route('/blog')  # Blog route
