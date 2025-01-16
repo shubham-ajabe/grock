@@ -12,34 +12,50 @@ def index():
     return render_template('index.html', webhook_data=webhook_data_store)
 
 # Store received webhook data
-webhook_payloads = []
+bitrix_request_received = False
+webhook_data_store = []
 
 @home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
-    global webhook_payloads
+    global bitrix_request_received, webhook_data_store
 
     if request.method == 'POST':
-        # Capture the incoming POST request payload
+        # Log the incoming POST request
+        logging.info("Received POST request from Bitrix24")
+        logging.info(f"Headers: {request.headers}")
+        logging.info(f"Body: {request.data.decode('utf-8')}")
+
+        # Parse the incoming POST request
         data = request.json
         if not data:
             logging.error("No data received in POST request.")
             return jsonify({"message": "No data received"}), 400
 
-        # Log the raw payload
-        logging.info(f"Received Payload: {data}")
+        # Extract data from Bitrix24 payload
+        event_name = data.get('event', 'No Event Name Provided')
+        fields_after = data.get('data', {}).get('FIELDS_AFTER', {})
+        task_id = fields_after.get('ID', 'No Task ID Provided')
+        task_title = fields_after.get('TITLE', 'No Title Provided')
 
-        # Store the payload for display
-        webhook_payloads.append(data)
+        # Store the extracted data
+        webhook_data_store.append({
+            "event": event_name,
+            "task_id": task_id,
+            "task_title": task_title
+        })
 
-        # Limit to the last 10 payloads
-        if len(webhook_payloads) > 10:
-            webhook_payloads.pop(0)
+        # Limit data store size to prevent overflow
+        if len(webhook_data_store) > 10:
+            webhook_data_store.pop(0)
 
-        # Respond to Bitrix24 webhook
-        return jsonify({"message": "Webhook payload received and logged"}), 200
+        # Set the flag to True
+        bitrix_request_received = True
 
-    # Render the HTML page with the captured payloads
-    return render_template('business_sector.html', payloads=webhook_payloads)
+        # Respond with a success message to Bitrix24
+        return jsonify({"message": "Webhook POST request received and processed"}), 200
+
+    # Render the HTML page with the received data
+    return render_template('business_sector.html', received=bitrix_request_received, data=webhook_data_store)
 
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
