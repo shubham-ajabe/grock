@@ -6,54 +6,60 @@
     <title>Webhook Event Data</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
             padding: 20px;
         }
-        h1 {
-            color: #0056b3;
-        }
-        table {
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
             width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
+            max-width: 800px;
+            overflow-y: auto;
+            max-height: 90vh;
         }
-        table, th, td {
-            border: 1px solid #ddd;
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
         }
-        th, td {
+        .event {
+            margin-bottom: 15px;
             padding: 10px;
-            text-align: left;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
-        th {
-            background-color: #f4f4f4;
+        .event p {
+            margin: 5px 0;
+        }
+        .placeholder {
+            text-align: center;
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <h1>Webhook Event Data</h1>
-    {% if requests %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Event Name</th>
-                    <th>Task ID</th>
-                    <th>Task Title</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for request in requests %}
-                    <tr>
-                        <td>{{ request.event }}</td>
-                        <td>{{ request.task_id }}</td>
-                        <td>{{ request.task_title }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No webhook data received yet.</p>
-    {% endif %}
+    <div class="container">
+        <h1>Webhook Event Data</h1>
+        {% if data and data|length > 0 %}
+            {% for item in data %}
+                <div class="event">
+                    <p><strong>Event:</strong> {{ item.event }}</p>
+                    <p><strong>Task ID:</strong> {{ item.task_id }}</p>
+                    <p><strong>Task Title:</strong> {{ item.task_title }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="placeholder">No webhook data received yet. Trigger a POST request to see the data here.</p>
+        {% endif %}
+    </div>
 </body>
 </html>
