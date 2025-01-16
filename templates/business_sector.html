@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webhook Event Display</title>
+    <title>Webhook Event Data</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,8 +34,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Webhook Event Display</h1>
-        <p>Received Event: <strong>{{ event }}</strong></p>
+        <h1>Webhook Event Data</h1>
+        {% if data %}
+            <p><strong>Event:</strong> {{ data.event }}</p>
+            <p><strong>Task ID:</strong> {{ data.task_id }}</p>
+            <p><strong>Task Title:</strong> {{ data.task_title }}</p>
+        {% else %}
+            <p>No event data received yet.</p>
+        {% endif %}
     </div>
 </body>
 </html>
