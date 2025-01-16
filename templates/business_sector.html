@@ -30,6 +30,9 @@
             font-size: 1.2em;
             color: #4d4d4d;
         }
+        .placeholder {
+            color: #888;
+        }
     </style>
 </head>
 <body>
@@ -40,7 +43,7 @@
             <p><strong>Task ID:</strong> {{ data.task_id }}</p>
             <p><strong>Task Title:</strong> {{ data.task_title }}</p>
         {% else %}
-            <p>No event data received yet.</p>
+            <p class="placeholder">No event data received yet. Trigger a POST request to see the data here.</p>
         {% endif %}
     </div>
 </body>
