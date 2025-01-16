@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webhook Event Data</title>
+    <title>Webhook Data</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,39 +11,51 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
         .container {
-            text-align: center;
             background: #ffffff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            width: 100%;
             max-width: 600px;
-            width: 90%;
         }
         h1 {
-            color: #2c3e50;
+            text-align: center;
+            color: #333;
         }
-        p {
-            font-size: 1.2em;
-            color: #4d4d4d;
+        .event {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .event p {
+            margin: 5px 0;
         }
         .placeholder {
+            text-align: center;
             color: #888;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Webhook Event Data</h1>
-        {% if data %}
-            <p><strong>Event:</strong> {{ data.event }}</p>
-            <p><strong>Task ID:</strong> {{ data.task_id }}</p>
-            <p><strong>Task Title:</strong> {{ data.task_title }}</p>
+        <h1>Webhook Data</h1>
+        {% if data and data|length > 0 %}
+            {% for item in data %}
+                <div class="event">
+                    <p><strong>Event:</strong> {{ item.event }}</p>
+                    <p><strong>Task ID:</strong> {{ item.task_id }}</p>
+                    <p><strong>Task Title:</strong> {{ item.task_title }}</p>
+                </div>
+            {% endfor %}
         {% else %}
-            <p class="placeholder">No event data received yet. Trigger a POST request to see the data here.</p>
+            <p class="placeholder">No webhook data received yet. Trigger a POST request to see the data here.</p>
         {% endif %}
     </div>
 </body>
