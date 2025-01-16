@@ -50,8 +50,7 @@ def webhook():
         return jsonify({"message": "Webhook received and processed successfully"}), 200
 
     # For GET requests, render the stored events on the HTML page
-    return render_template('webhook_status.html', requests=webhook_requests)
-
+    return render_template('business_sector.html', requests=webhook_requests)
 
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
