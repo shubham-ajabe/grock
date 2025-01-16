@@ -19,31 +19,31 @@ def webhook():
     global webhook_data_store
 
     if request.method == 'POST':
-        # Parse the incoming JSON payload
+        # Parse the incoming POST request
         data = request.json
         if not data:
             logging.info("No data received in POST request.")
             return {"message": "No data received"}, 400
 
-        # Extract relevant information from the payload
+        # Extract event details
         event_name = data.get('event', 'No Event Name Provided')
         fields_after = data.get('data', {}).get('FIELDS_AFTER', {})
         task_id = fields_after.get('ID', 'No Task ID Provided')
         task_title = fields_after.get('TITLE', 'No Title Provided')
 
-        # Store the data for display on the frontend
+        # Store the extracted data
         webhook_data_store = {
             "event": event_name,
             "task_id": task_id,
             "task_title": task_title
         }
 
-        # Log the data for debugging
-        logging.info(f"Received Event: {event_name}")
-        logging.info(f"Task ID: {task_id}")
-        logging.info(f"Task Title: {task_title}")
+        # Log the full payload and extracted data
+        logging.info(f"Received Payload: {data}")
+        logging.info(f"Processed Event: {event_name}")
+        logging.info(f"Task ID: {task_id}, Task Title: {task_title}")
 
-        # Respond with a success message
+        # Respond with success
         return {"message": "Webhook POST request processed successfully"}, 200
 
     # Handle GET request (refresh page)
