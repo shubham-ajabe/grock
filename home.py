@@ -22,6 +22,10 @@ webhook_data_store = []
 def webhook():
     global webhook_data_store
 
+    # Ensure webhook_data_store is a list to hold multiple events
+    if not isinstance(webhook_data_store, list):
+        webhook_data_store = []
+
     if request.method == 'POST':
         # Parse the incoming POST request
         data = request.json
