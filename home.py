@@ -51,7 +51,6 @@ def webhook():
     return render_template('business_sector.html', data=webhook_data_store)
 
 
-
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
 def about_us():
