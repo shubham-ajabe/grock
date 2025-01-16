@@ -20,8 +20,10 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            max-width: 800px;
             width: 90%;
+            overflow-y: auto;
+            max-height: 90vh;
         }
         h1 {
             color: #2c3e50;
@@ -29,6 +31,13 @@
         p {
             font-size: 1.2em;
             color: #4d4d4d;
+        }
+        .event {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
         .placeholder {
             color: #888;
@@ -38,10 +47,14 @@
 <body>
     <div class="container">
         <h1>Webhook Event Data</h1>
-        {% if data %}
-            <p><strong>Event:</strong> {{ data.event }}</p>
-            <p><strong>Task ID:</strong> {{ data.task_id }}</p>
-            <p><strong>Task Title:</strong> {{ data.task_title }}</p>
+        {% if data and data|length > 0 %}
+            {% for item in data %}
+                <div class="event">
+                    <p><strong>Event:</strong> {{ item.event }}</p>
+                    <p><strong>Task ID:</strong> {{ item.task_id }}</p>
+                    <p><strong>Task Title:</strong> {{ item.task_title }}</p>
+                </div>
+            {% endfor %}
         {% else %}
             <p class="placeholder">No event data received yet. Trigger a POST request to see the data here.</p>
         {% endif %}
