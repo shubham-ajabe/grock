@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webhook Payloads</title>
+    <title>Webhook Data</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,33 +14,53 @@
         h1 {
             color: #0056b3;
         }
-        .payload {
-            background: #fff;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
         }
-        pre {
-            font-family: monospace;
-            font-size: 0.9em;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .placeholder {
+            color: #888;
         }
     </style>
 </head>
 <body>
-    <h1>Received Webhook Payloads</h1>
-    {% if payloads %}
-        {% for payload in payloads %}
-            <div class="payload">
-                <pre>{{ payload | tojson(indent=2) }}</pre>
-            </div>
-        {% endfor %}
+    <h1>Webhook Data</h1>
+    {% if received %}
+        {% if data and data|length > 0 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Task ID</th>
+                        <th>Task Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                        <tr>
+                            <td>{{ item.event }}</td>
+                            <td>{{ item.task_id }}</td>
+                            <td>{{ item.task_title }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="placeholder">No task data available yet.</p>
+        {% endif %}
     {% else %}
-        <p>No webhook payloads received yet.</p>
+        <p class="placeholder">No POST request received from Bitrix24 yet.</p>
     {% endif %}
 </body>
 </html>
