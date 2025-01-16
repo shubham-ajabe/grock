@@ -22,6 +22,10 @@ webhook_data_store = []
 def webhook():
     global webhook_data_store
 
+    # Ensure webhook_data_store is a list to hold multiple events
+    if not isinstance(webhook_data_store, list):
+        webhook_data_store = []
+
     if request.method == 'POST':
         # Parse the incoming POST request
         data = request.json
@@ -52,6 +56,7 @@ def webhook():
 
     # Handle GET request (refresh page) and display all stored events
     return render_template('business_sector.html', data=webhook_data_store)
+
 
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
