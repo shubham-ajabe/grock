@@ -15,42 +15,42 @@ bitrix_request_received = False  # Track if a Bitrix24 POST request has been rec
 def index():
     return render_template('index.html', webhook_data=webhook_data_store)
 
-# Store received webhook data
-webhook_data_store = []
-
-@app.route('/webhook', methods=['GET', 'POST'])
+@home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
-    global webhook_requests
+    global webhook_data_store
 
     if request.method == 'POST':
-        # Parse the incoming POST request payload
+        # Parse the incoming POST request
         data = request.json
         if not data:
-            logging.error("No data received in POST request.")
-            return jsonify({"message": "Invalid payload: No data received"}), 400
+            logging.info("No data received in POST request.")
+            return {"message": "No data received"}, 400
 
-        # Extract event details from the Bitrix24 payload
+        # Extract event details
         event_name = data.get('event', 'No Event Name Provided')
         fields_after = data.get('data', {}).get('FIELDS_AFTER', {})
         task_id = fields_after.get('ID', 'No Task ID Provided')
         task_title = fields_after.get('TITLE', 'No Title Provided')
 
-        # Append the data to the global data store
-        webhook_requests.append({
+        # Store the extracted data
+        webhook_data_store = {
             "event": event_name,
             "task_id": task_id,
             "task_title": task_title
-        })
+        }
 
-        # Log the received payload
+        # Log the full payload and extracted data
         logging.info(f"Received Payload: {data}")
-        logging.info(f"Processed Event: {event_name}, Task ID: {task_id}, Task Title: {task_title}")
+        logging.info(f"Processed Event: {event_name}")
+        logging.info(f"Task ID: {task_id}, Task Title: {task_title}")
 
-        # Respond to Bitrix24 webhook
-        return jsonify({"message": "Webhook received and processed successfully"}), 200
+        # Respond with success
+        return {"message": "Webhook POST request processed successfully"}, 200
 
-    # For GET requests, render the stored events on the HTML page
-    return render_template('business_sector.html', requests=webhook_requests)
+    # Handle GET request (refresh page)
+    return render_template('business_sector.html', data=webhook_data_store)
+
+
 
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
