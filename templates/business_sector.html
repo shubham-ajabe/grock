@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Sector</title>
+    <title>Webhook Event Display</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f7fc;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
         .container {
             text-align: center;
@@ -25,31 +24,18 @@
             width: 90%;
         }
         h1 {
-            font-size: 2em;
             color: #2c3e50;
         }
         p {
             font-size: 1.2em;
             color: #4d4d4d;
         }
-        .success {
-            color: green;
-            font-weight: bold;
-        }
-        .error {
-            color: red;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Business Sector</h1>
-        {% if received %}
-            <p class="success">Bitrix outbound webhook POST request has been received.</p>
-        {% else %}
-            <p class="error">No POST request from Bitrix24 received yet.</p>
-        {% endif %}
+        <h1>Webhook Event Display</h1>
+        <p>Received Event: <strong>{{ event }}</strong></p>
     </div>
 </body>
 </html>
