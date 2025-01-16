@@ -13,14 +13,9 @@ bitrix_request_received = False  # Track if a Bitrix24 POST request has been rec
 @home.route('/')  # Home route
 def index():
     return render_template('index.html', webhook_data=webhook_data_store)
-
 @home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     global webhook_data_store
-
-    # Ensure webhook_data_store is a list to hold multiple events
-    if not isinstance(webhook_data_store, list):
-        webhook_data_store = []
 
     if request.method == 'POST':
         # Parse the incoming POST request
@@ -35,12 +30,12 @@ def webhook():
         task_id = fields_after.get('ID', 'No Task ID Provided')
         task_title = fields_after.get('TITLE', 'No Title Provided')
 
-        # Append the new event data to the list
-        webhook_data_store.append({
+        # Store the extracted data
+        webhook_data_store = {
             "event": event_name,
             "task_id": task_id,
             "task_title": task_title
-        })
+        }
 
         # Log the full payload and extracted data
         logging.info(f"Received Payload: {data}")
@@ -52,7 +47,6 @@ def webhook():
 
     # Handle GET request (refresh page)
     return render_template('business_sector.html', data=webhook_data_store)
-
 
 
 # Add routes for additional pages
