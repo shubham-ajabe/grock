@@ -1,22 +1,16 @@
-
 from flask import Blueprint, render_template, request, jsonify
 import logging
 
+# Configure logging
 logging.basicConfig(filename='webhook.log', level=logging.INFO, format='%(asctime)s - %(message)s')
 
-# Create a Blueprint for routes
+# Create a Blueprint for this module
 home = Blueprint('home', __name__)
 
+# Store webhook data
 webhook_requests = []
 
-# Configure logging
-bitrix_request_received = False  # Track if a Bitrix24 POST request has been received
-
-@home.route('/')  # Home route
-def index():
-    return render_template('index.html', webhook_data=webhook_data_store)
-
-@app.route('/webhook', methods=['GET', 'POST'])
+@home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     global webhook_requests
 
@@ -27,10 +21,9 @@ def webhook():
             logging.error("No data received in POST request.")
             return jsonify({"message": "Invalid payload: No data received"}), 400
 
-        # Extract event details from the Bitrix24 payload
+        # Extract event details
         event_name = data.get('event', 'No Event Name Provided')
         fields_after = data.get('data', {}).get('FIELDS_AFTER', {})
-        fields_before = data.get('data', {}).get('FIELDS_BEFORE', {})
         task_id = fields_after.get('ID', 'No Task ID Provided')
         task_title = fields_after.get('TITLE', 'No Title Provided')
 
@@ -38,9 +31,7 @@ def webhook():
         webhook_requests.append({
             "event": event_name,
             "task_id": task_id,
-            "task_title": task_title,
-            "fields_before": fields_before,
-            "fields_after": fields_after
+            "task_title": task_title
         })
 
         # Limit the list to the most recent 10 events
@@ -56,31 +47,3 @@ def webhook():
 
     # For GET requests, render the stored events on the HTML page
     return render_template('business_sector.html', requests=webhook_requests)
-
-
-# Add routes for additional pages
-@home.route('/about_us')  # About Us route
-def about_us():
-    return render_template('about_us.html')
-
-@home.route('/our_services')  # Our Services route
-def our_services():
-    return render_template('our_services.html')
-
-@home.route('/business_sector')  # Business Sector route
-def business_sector():
-    global bitrix_request_received
-    bitrix_request_received = False  # Reset the flag on page load
-    return render_template('business_sector.html', received=bitrix_request_received)
-
-@home.route('/blog')  # Blog route
-def blog():
-    return render_template('blog.html')
-
-@home.route('/quick_links')  # Quick Links route
-def quick_links():
-    return render_template('quick_links.html')
-
-@home.route('/our_vision')  # Our Vision route
-def our_vision():
-    return render_template('our_vision.html')
