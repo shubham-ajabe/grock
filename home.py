@@ -46,7 +46,7 @@ def webhook():
         # Respond with success
         return {"message": "Webhook POST request processed successfully"}, 200
 
-    # Handle GET request (refresh page)
+    # Handle GET request (refresh page) and return the latest data
     return render_template('business_sector.html', data=webhook_data_store)
 
 
