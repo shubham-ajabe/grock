@@ -7,16 +7,12 @@ logging.basicConfig(filename='webhook.log', level=logging.INFO, format='%(asctim
 # Create a Blueprint for routes
 home = Blueprint('home', __name__)
 
-# Store webhook data for display (optional for testing)
-webhook_data_store = []
-bitrix_request_received = False  # Track if a Bitrix24 POST request has been received
-
 @home.route('/')  # Home route
 def index():
     return render_template('index.html', webhook_data=webhook_data_store)
 
 # Store received webhook data
-webhook_data_store = []
+webhook_payloads = []
 
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
