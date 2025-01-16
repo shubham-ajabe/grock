@@ -1,11 +1,11 @@
 from flask import Flask
-from home import home  # Import the Blueprint from home.py
+from home import home  # Import the blueprint
 
-# Initialize the Flask app
+# Create the Flask application
 app = Flask(__name__)
 
-# Register the Blueprint for routes
+# Register the blueprint
 app.register_blueprint(home)
 
 if __name__ == '__main__':
-    app.run()  # For local testing, Render will use Gunicorn
+    app.run(debug=True)
