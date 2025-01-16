@@ -19,12 +19,16 @@ def index():
 def webhook():
     global webhook_data_store
 
+    # Ensure webhook_data_store is a list to hold multiple events
+    if not isinstance(webhook_data_store, list):
+        webhook_data_store = []
+
     if request.method == 'POST':
         # Parse the incoming POST request
         data = request.json
         if not data:
             logging.info("No data received in POST request.")
-            return {"message": "No data received"}, 400
+            return jsonify({"message": "No data received"}), 400
 
         # Extract event details
         event_name = data.get('event', 'No Event Name Provided')
@@ -32,12 +36,12 @@ def webhook():
         task_id = fields_after.get('ID', 'No Task ID Provided')
         task_title = fields_after.get('TITLE', 'No Title Provided')
 
-        # Store the extracted data
-        webhook_data_store = {
+        # Append the new event data to the list
+        webhook_data_store.append({
             "event": event_name,
             "task_id": task_id,
             "task_title": task_title
-        }
+        })
 
         # Log the full payload and extracted data
         logging.info(f"Received Payload: {data}")
@@ -45,9 +49,9 @@ def webhook():
         logging.info(f"Task ID: {task_id}, Task Title: {task_title}")
 
         # Respond with success
-        return {"message": "Webhook POST request processed successfully"}, 200
+        return jsonify({"message": "Webhook POST request processed successfully"}), 200
 
-    # Handle GET request (refresh page)
+    # Handle GET request (refresh page) and display all stored events
     return render_template('business_sector.html', data=webhook_data_store)
 
 
