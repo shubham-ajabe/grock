@@ -13,6 +13,8 @@ bitrix_request_received = False  # Track if a Bitrix24 POST request has been rec
 @home.route('/')  # Home route
 def index():
     return render_template('index.html', webhook_data=webhook_data_store)
+
+
 @home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     global webhook_data_store
