@@ -14,7 +14,7 @@ def index():
 # Store received webhook data
 webhook_payloads = []
 
-@app.route('/webhook', methods=['GET', 'POST'])
+@home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     global webhook_payloads
 
