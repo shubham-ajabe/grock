@@ -17,22 +17,30 @@ def index():
 @home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     global bitrix_request_received
+    global webhook_data_store
 
     if request.method == 'POST':
-        # Log the incoming POST request
-        logging.info("Received POST request from Bitrix24")
-        logging.info(f"Headers: {request.headers}")
-        logging.info(f"Body: {request.data.decode('utf-8')}")
+        # Parse the incoming POST request
+        data = request.json
+        if not data:
+            logging.info("No data received in POST request.")
+            return {"message": "No data received"}, 400
 
-        # Set the flag to True to confirm a request was received
-        bitrix_request_received = True
+        # Extract the event name (if available)
+        event_name = data.get('event', 'No Event Name Provided')
 
-        # Respond with a success message to Bitrix24
+        # Store the event name for display
+        webhook_data_store = {"event": event_name}
+
+        # Log the event name
+        logging.info(f"Received Event: {event_name}")
+
+        # Confirm receipt to Bitrix24
         return {"message": "Webhook POST request received"}, 200
 
-    # Reset the flag to False on GET request (refresh)
+    # Handle GET request (refresh page)
     bitrix_request_received = False
-    return render_template('business_sector.html', received=bitrix_request_received)
+    return render_template('business_sector.html', event=webhook_data_store.get('event', 'No Data Yet'))
 
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
