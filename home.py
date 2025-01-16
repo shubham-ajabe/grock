@@ -20,42 +20,45 @@ webhook_data_store = []
 
 @home.route('/webhook', methods=['GET', 'POST'])
 def webhook():
-    global webhook_data_store
-
-    # Ensure webhook_data_store is a list to hold multiple events
-    if not isinstance(webhook_data_store, list):
-        webhook_data_store = []
+    global bitrix_request_received, webhook_data_store
 
     if request.method == 'POST':
+        # Log the incoming POST request
+        logging.info("Received POST request from Bitrix24")
+        logging.info(f"Headers: {request.headers}")
+        logging.info(f"Body: {request.data.decode('utf-8')}")
+
         # Parse the incoming POST request
         data = request.json
         if not data:
-            logging.info("No data received in POST request.")
+            logging.error("No data received in POST request.")
             return jsonify({"message": "No data received"}), 400
 
-        # Extract event details
+        # Extract data from Bitrix24 payload
         event_name = data.get('event', 'No Event Name Provided')
         fields_after = data.get('data', {}).get('FIELDS_AFTER', {})
         task_id = fields_after.get('ID', 'No Task ID Provided')
         task_title = fields_after.get('TITLE', 'No Title Provided')
 
-        # Append the new event data to the list
+        # Store the extracted data
         webhook_data_store.append({
             "event": event_name,
             "task_id": task_id,
             "task_title": task_title
         })
 
-        # Log the full payload and extracted data
-        logging.info(f"Received Payload: {data}")
-        logging.info(f"Processed Event: {event_name}")
-        logging.info(f"Task ID: {task_id}, Task Title: {task_title}")
+        # Limit data store size to prevent overflow
+        if len(webhook_data_store) > 10:
+            webhook_data_store.pop(0)
 
-        # Respond with success
-        return jsonify({"message": "Webhook POST request processed successfully"}), 200
+        # Set the flag to True
+        bitrix_request_received = True
 
-    # Handle GET request (refresh page) and display all stored events
-    return render_template('business_sector.html', data=webhook_data_store)
+        # Respond with a success message to Bitrix24
+        return jsonify({"message": "Webhook POST request received and processed"}), 200
+
+    # Render the HTML page with the received data
+    return render_template('business_sector.html', received=bitrix_request_received, data=webhook_data_store)
 
 # Add routes for additional pages
 @home.route('/about_us')  # About Us route
